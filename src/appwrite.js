@@ -41,11 +41,28 @@ export const updateSearchCount = async (searchTerm, movie) => {
                    searchTerm,
                    count: 1,
                    movie_id: movie.id,
-                   poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_url}`
+                   poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                }
            })
        }
    } catch (error) {
        console.error(error);
    }
+}
+
+export const getTrendingMovies = async () => {
+    try {
+        const result = await tablesDB.listRows({
+            databaseId: DATABASE_ID,
+            tableId: TABLE_ID,
+            queries: [
+                Query.limit(5),
+                Query.orderDesc('count')
+            ]
+        });
+
+        return result.rows;
+    } catch (error) {
+        console.error(error);
+    }
 }
